@@ -91,7 +91,7 @@ const vacancies = [
     emoji: "📋", title: "Администратор", places: 1, salary: "60 000 ₽/мес",
     desc: "Координация работы смены, касса, работа с гостями, контроль качества.",
     schedule: "5 дней в неделю, полный день",
-    req: "Опыт в сфере обслуживания от 1 года",
+    req: "Ответственность, умение общаться с людьми. Обучаем с нуля",
   },
   {
     emoji: "🎓", title: "Стажёр", places: 4, salary: "20 000 ₽/мес",
@@ -154,7 +154,7 @@ export default function Index() {
           НАБЕРЕЖНАЯ ДОБРА
         </div>
         <nav style={{ display: "flex", gap: "32px" }}>
-          {[["#menu","МЕНЮ"],["#apply","СТАЖЁРАМ"],["#vacancies","ВАКАНСИИ"],["#about","О НАС"],["#contacts","КОНТАКТЫ"]].map(([href, label]) => (
+          {[["#apply","СТАЖЁРАМ"],["#vacancies","ВАКАНСИИ"],["#contacts","КОНТАКТЫ"]].map(([href, label]) => (
             <a key={href} href={href} style={{ color: S.dark, textDecoration: "none", fontWeight: 700, fontSize: "13px", letterSpacing: "0.5px" }}>
               {label}
             </a>
@@ -197,8 +197,8 @@ export default function Index() {
 
         <div style={{ position: "relative", overflow: "hidden" }}>
           <img
-            src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=80"
-            alt="Выпечка"
+            src="https://cdn.poehali.dev/projects/05b0b7de-7dfd-4211-88ef-00b974e4c49e/bucket/f020329c-94b1-45b2-b171-1998290997fa.png"
+            alt="Круассаны и булочки"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
           <div style={{
@@ -296,38 +296,6 @@ export default function Index() {
               <span style={{ color: S.primary, fontWeight: 800, fontSize: "16px", whiteSpace: "nowrap" }}>
                 {item.price}
               </span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* TRAINING PLAN */}
-      <section style={{ padding: "70px 60px", background: S.dark, color: "white" }}>
-        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5vw, 64px)", marginBottom: "12px" }}>
-          ПЛАН ОБУЧЕНИЯ
-        </h2>
-        <p style={{ color: "#aaa", marginBottom: "48px", fontSize: "15px" }}>
-          Системный подход от первого контакта до записи в трудовой
-        </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
-          {trainingSteps.map((s, i) => (
-            <div key={i} style={{
-              display: "grid", gridTemplateColumns: "80px 1fr auto",
-              alignItems: "center", padding: "24px 0",
-              borderTop: "1px solid #333",
-            }}>
-              <span style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "32px", color: S.primary }}>
-                {s.step}
-              </span>
-              <div>
-                <p style={{ fontWeight: 800, fontSize: "16px", textTransform: "uppercase" }}>{s.title}</p>
-                <p style={{ color: "#aaa", fontSize: "13px", marginTop: "4px" }}>{s.who}</p>
-              </div>
-              {s.duration && (
-                <span style={{ background: S.accent, color: "white", padding: "6px 14px", fontWeight: 700, fontSize: "13px" }}>
-                  {s.duration}
-                </span>
-              )}
             </div>
           ))}
         </div>
