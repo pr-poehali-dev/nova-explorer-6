@@ -483,15 +483,15 @@ export default function Index() {
       </section>
 
       {/* SLOGAN */}
-      <section style={{ padding: "70px 60px", background: S.dark, color: "white" }}>
-        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(42px, 7vw, 88px)", lineHeight: 1, marginBottom: "16px" }}>
+      <section style={{ padding: "48px 60px", background: S.dark, color: "white" }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5vw, 64px)", lineHeight: 1, marginBottom: "8px" }}>
           ВЫ ЕДИТЕ —
         </h2>
-        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(42px, 7vw, 88px)", lineHeight: 1, color: S.accent, marginBottom: "32px" }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5vw, 64px)", lineHeight: 1, color: S.primary, marginBottom: "24px" }}>
           ОНИ РАСТУТ.
         </h2>
-        <p style={{ color: "#aaa", fontSize: "15px", lineHeight: 1.7, maxWidth: "520px" }}>
-          Каждый ваш визит — это вклад в чью-то первую запись в трудовой.<br />
+        <p style={{ color: "#aaa", fontSize: "14px", lineHeight: 1.7, maxWidth: "480px" }}>
+          Каждый ваш визит — это вклад в чью-то первую запись в трудовой.
           Без пожертвований и фондов. Просто приходите обедать.
         </p>
       </section>
