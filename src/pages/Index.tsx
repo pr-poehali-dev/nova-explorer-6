@@ -120,7 +120,7 @@ export default function Index() {
           <a href="#vacancies">Вакансии</a>
           <a href="#contacts">Контакты</a>
         </nav>
-        <a href="#apply" className="btn-cta">Работать у нас</a>
+        <a href="#contacts" className="btn-cta">Контакты</a>
       </header>
 
       <main>
@@ -319,7 +319,7 @@ export default function Index() {
               ПОДАТЬ ЗАЯВКУ
             </h2>
             <p style={{ color: "#aaa", marginBottom: "32px", lineHeight: 1.6 }}>
-              Телефон для связи: <strong style={{ color: "white" }}>+7 (423) 000-00-00</strong>
+              Телефон для связи: <strong style={{ color: "white" }}>+7 (994) 018-35-43</strong>
             </p>
 
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -462,7 +462,7 @@ export default function Index() {
                 <Icon name="MapPin" size={22} />
               </div>
               <p style={{ fontWeight: 800, textTransform: "uppercase", fontSize: "13px", marginBottom: "6px" }}>Адрес</p>
-              <p style={{ color: "#555", fontSize: "14px", lineHeight: 1.5 }}>Центр Владивостока</p>
+              <p style={{ color: "#555", fontSize: "14px", lineHeight: 1.5 }}>ул. Пушкинская, 34, Владивосток</p>
             </div>
             <div style={{ border: "var(--border)", background: "white", boxShadow: "var(--shadow)", padding: "24px" }}>
               <div style={{ width: "44px", height: "44px", background: "var(--accent)", border: "var(--border)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "14px" }}>
@@ -477,8 +477,8 @@ export default function Index() {
                 <Icon name="Phone" size={22} />
               </div>
               <p style={{ fontWeight: 800, textTransform: "uppercase", fontSize: "13px", marginBottom: "6px" }}>Телефон</p>
-              <a href="tel:+74230000000" style={{ color: "var(--primary)", fontWeight: 700, fontSize: "15px" }}>
-                +7 (423) 000-00-00
+              <a href="tel:+79940183543" style={{ color: "var(--primary)", fontWeight: 700, fontSize: "15px" }}>
+                +7 (994) 018-35-43
               </a>
             </div>
           </div>
@@ -508,8 +508,8 @@ export default function Index() {
           <p style={{ color: "#666", marginTop: "10px" }}>09:00 – 21:00, без выходных</p>
           <p style={{ color: "#666" }}>Владивосток</p>
           <p style={{ marginTop: "10px" }}>
-            <a href="tel:+74230000000" style={{ color: "var(--primary)", fontWeight: 700 }}>
-              +7 (423) 000-00-00
+            <a href="tel:+79940183543" style={{ color: "var(--primary)", fontWeight: 700 }}>
+              +7 (994) 018-35-43
             </a>
           </p>
         </div>
