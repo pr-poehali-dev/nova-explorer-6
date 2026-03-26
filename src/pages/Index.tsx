@@ -1,14 +1,13 @@
 import { useState } from "react";
-import Icon from "@/components/ui/icon";
 
-const menuData = {
+const menuData: Record<string, { name: string; weight: string; price: string }[]> = {
   "Супы": [
-    { name: "Суп куриный с лапшой", weight: "300 мл", price: "250 ₽" },
+    { name: "Суп куриный с лапшой (домашний)", weight: "300 мл", price: "250 ₽" },
     { name: "Борщ с говядиной и сметаной", weight: "300 мл", price: "320 ₽" },
     { name: "Суп рыбный с лососем и укропом", weight: "300 мл", price: "290 ₽" },
     { name: "Суп-пюре из тыквы с семечками", weight: "300 мл", price: "220 ₽" },
   ],
-  "Вторые блюда": [
+  "Второе": [
     { name: "Картофельное пюре с котлетой по-домашнему", weight: "300 г", price: "350 ₽" },
     { name: "Гречка с печенью по-строгановски", weight: "300 г", price: "380 ₽" },
     { name: "Паста с курицей в сливочном соусе", weight: "300 г", price: "420 ₽" },
@@ -59,36 +58,23 @@ const menuData = {
   ],
 };
 
-const vacancies = [
-  { icon: "ChefHat", title: "Пекарь", places: 2, salary: "55 000 ₽/мес" },
-  { icon: "UtensilsCrossed", title: "Повар", places: 2, salary: "60 000 ₽/мес" },
-  { icon: "Users", title: "Официант", places: 2, salary: "40 000 ₽/мес" },
-  { icon: "ClipboardList", title: "Администратор", places: 1, salary: "60 000 ₽/мес" },
-  { icon: "GraduationCap", title: "Стажёр (оплачиваемая стажировка)", places: 4, salary: "20 000 ₽/мес" },
-  { icon: "Sparkles", title: "Уборщик", places: 1, salary: "35 000 ₽/мес" },
-];
+const tabIcons: Record<string, string> = {
+  "Супы": "🍜",
+  "Второе": "🍽️",
+  "Салаты": "🥗",
+  "Выпечка": "🥐",
+  "Напитки": "☕",
+  "Десерты": "🏠",
+  "Комбо": "⭐",
+};
 
-const aboutCards = [
-  {
-    icon: "Heart",
-    title: "Кто мы",
-    text: "«Набережная добра» — социальное кафе во Владивостоке с домашней кухней и собственной пекарней. Готовим обеды, печём круассаны, пирожки, булочки с корицей, блины, варим качественный кофе.",
-  },
-  {
-    icon: "Rocket",
-    title: "Наша миссия",
-    text: "Дать первый рабочий опыт тем, кому сложно начать. Трудоустраиваем выпускников детских домов, людей с инвалидностью и подростков 14–18 лет. Ломаем замкнутый круг «нет опыта — нет работы».",
-  },
-  {
-    icon: "BookOpen",
-    title: "Как это работает",
-    text: "Каждый стажёр закреплён за наставником — опытным пекарем, поваром или администратором. Обучение в реальном процессе: выпечка, приготовление блюд, работа с кассой, обслуживание гостей. После — запись в трудовой.",
-  },
-  {
-    icon: "Star",
-    title: "Почему выбирают нас",
-    text: "Единственное кафе во Владивостоке, которое совмещает домашнюю кухню, пекарню, кофе и системное трудоустройство трёх уязвимых групп. Приходя к нам, вы становитесь частью доброго дела.",
-  },
+const vacancies = [
+  { emoji: "👨‍🍳", title: "Пекарь", places: 2, salary: "55 000 ₽/мес" },
+  { emoji: "🍳", title: "Повар", places: 2, salary: "60 000 ₽/мес" },
+  { emoji: "🤝", title: "Официант", places: 2, salary: "40 000 ₽/мес" },
+  { emoji: "📋", title: "Администратор", places: 1, salary: "60 000 ₽/мес" },
+  { emoji: "🎓", title: "Стажёр", places: 4, salary: "20 000 ₽/мес" },
+  { emoji: "✨", title: "Уборщик", places: 1, salary: "35 000 ₽/мес" },
 ];
 
 const trainingSteps = [
@@ -97,423 +83,453 @@ const trainingSteps = [
   { step: "03", title: "Подписание договора о стажировке", who: "Юрист, родители для подростков", duration: "1 день" },
 ];
 
+const S = {
+  bg: "#f5f0e8",
+  dark: "#1a1a1a",
+  primary: "#b83232",
+  accent: "#5bc8e8",
+  border: "2px solid #1a1a1a",
+  text: "#1a1a1a",
+  muted: "#666",
+};
+
 export default function Index() {
   const [activeTab, setActiveTab] = useState("Супы");
-  const [formData, setFormData] = useState({ name: "", phone: "", position: "" });
+  const [formData, setFormData] = useState({ name: "", phone: "", position: "", category: "", comment: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     alert("Заявка отправлена! Мы свяжемся с вами в ближайшее время.");
-    setFormData({ name: "", phone: "", position: "" });
+    setFormData({ name: "", phone: "", position: "", category: "", comment: "" });
   };
 
   return (
-    <>
-      <div className="grain-overlay" />
+    <div style={{ background: S.bg, color: S.dark, fontFamily: "'Montserrat', sans-serif", minHeight: "100vh" }}>
 
-      {/* Header */}
-      <header className="header">
-        <div className="logo">НАБЕРЕЖНАЯ<br className="block md:hidden" /> ДОБРА</div>
-        <nav>
-          <a href="#menu">Меню</a>
-          <a href="#about">О нас</a>
-          <a href="#vacancies">Вакансии</a>
-          <a href="#contacts">Контакты</a>
+      {/* HEADER */}
+      <header style={{
+        background: "white",
+        borderBottom: S.border,
+        padding: "0 40px",
+        height: "72px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+      }}>
+        <div style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "20px", letterSpacing: "-0.5px", lineHeight: 1.1 }}>
+          НАБЕРЕЖНАЯ ДОБРА
+        </div>
+        <nav style={{ display: "flex", gap: "32px" }}>
+          {[["#menu","МЕНЮ"],["#apply","СТАЖЁРАМ"],["#vacancies","ВАКАНСИИ"],["#about","О НАС"],["#contacts","КОНТАКТЫ"]].map(([href, label]) => (
+            <a key={href} href={href} style={{ color: S.dark, textDecoration: "none", fontWeight: 700, fontSize: "13px", letterSpacing: "0.5px" }}>
+              {label}
+            </a>
+          ))}
         </nav>
-        <a href="#contacts" className="btn-cta">Контакты</a>
       </header>
 
-      <main>
-        {/* Hero */}
-        <section className="hero">
-          <div className="hero-content">
-            <h1 className="hero-title">
-              ТАМ, ГДЕ
-              <br />
-              СЕРДЦУ <span>ТЕПЛО</span>
-            </h1>
-            <p className="text-base md:text-lg mb-6 leading-relaxed" style={{ color: "#555" }}>
-              Домашняя кухня и своя пекарня во Владивостоке. Средний чек — <strong>850 ₽</strong>.
-              <br />
-              <em>Каждый обед здесь — это чей-то первый рабочий опыт.</em>
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#menu" className="btn-cta" style={{ background: "var(--primary)", color: "white" }}>
-                Смотреть меню
-              </a>
-              <a href="#about" className="btn-cta" style={{ background: "white" }}>
-                О нас
-              </a>
-            </div>
-          </div>
-          <div className="hero-img" style={{ background: "url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80') center center / cover" }}>
-            <div className="sticker">
-              850 ₽
-              <br />
-              средний чек
-            </div>
-            <div className="floating-tag hidden md:block" style={{ top: "20%", left: "10%" }}>
-              #ДОМАШНЯЯ КУХНЯ
-            </div>
-            <div className="floating-tag hidden md:block" style={{ bottom: "30%", right: "20%" }}>
-              СВОЯ ПЕКАРНЯ
-            </div>
-          </div>
-        </section>
-
-        {/* Marquee */}
-        <div className="marquee">
-          <div className="marquee-content">
-            &nbsp; * ДОМАШНЯЯ КУХНЯ * СВОЯ ПЕКАРНЯ * КАЧЕСТВЕННЫЙ КОФЕ * ПЕРВЫЙ РАБОЧИЙ ОПЫТ * ВЛАДИВОСТОК *
-            ДОМАШНЯЯ КУХНЯ * СВОЯ ПЕКАРНЯ * КАЧЕСТВЕННЫЙ КОФЕ * ПЕРВЫЙ РАБОЧИЙ ОПЫТ * ВЛАДИВОСТОК *
+      {/* HERO */}
+      <section style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "580px", borderBottom: S.border }}>
+        <div style={{ padding: "60px 60px", display: "flex", flexDirection: "column", justifyContent: "center", background: S.bg }}>
+          <h1 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(42px, 5vw, 72px)", lineHeight: 1, marginBottom: "16px" }}>
+            НАБЕРЕЖНАЯ
+          </h1>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontWeight: 700, fontSize: "clamp(42px, 5vw, 72px)", color: S.primary, lineHeight: 1, marginBottom: "8px" }}>
+            ДОБРА —
+          </h1>
+          <h2 style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontWeight: 500, fontSize: "clamp(22px, 3vw, 38px)", color: S.dark, marginBottom: "32px", lineHeight: 1.2 }}>
+            там, где сердцу тепло
+          </h2>
+          <p style={{ fontSize: "15px", lineHeight: 1.7, color: S.accent, maxWidth: "420px", marginBottom: "36px" }}>
+            Домашняя кухня и своя пекарня во Владивостоке. Каждый обед здесь — это чей-то первый рабочий опыт. Средний чек 850 Р.
+          </p>
+          <div style={{ display: "flex", gap: "16px" }}>
+            <a href="#menu" style={{
+              background: S.primary, color: "white", padding: "14px 28px",
+              border: S.border, fontWeight: 800, fontSize: "13px", textDecoration: "none",
+              letterSpacing: "1px", textTransform: "uppercase",
+            }}>
+              СМОТРЕТЬ МЕНЮ
+            </a>
+            <a href="#about" style={{
+              background: "white", color: S.dark, padding: "14px 28px",
+              border: S.border, fontWeight: 800, fontSize: "13px", textDecoration: "none",
+              letterSpacing: "1px", textTransform: "uppercase",
+            }}>
+              О НАС
+            </a>
           </div>
         </div>
 
-        {/* Menu with tabs */}
-        <section className="section-padding" id="menu">
-          <div className="section-header">
-            <h2 className="section-title">НАШЕ МЕНЮ</h2>
-            <p style={{ color: "#666", fontWeight: 700, textTransform: "uppercase", fontSize: "14px" }}>
-              Домашняя кухня каждый день
-            </p>
+        <div style={{ position: "relative", overflow: "hidden" }}>
+          <img
+            src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=80"
+            alt="Выпечка"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
+          <div style={{
+            position: "absolute", top: "24px", left: "24px",
+            background: "white", border: S.border,
+            borderRadius: "999px", padding: "10px 20px",
+            fontWeight: 700, fontSize: "13px",
+          }}>
+            #ДОБРОЕДЕЛО
           </div>
-
-          {/* Tabs */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "40px" }}>
-            {Object.keys(menuData).map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className="btn-cta"
-                style={{
-                  background: activeTab === tab ? "var(--primary)" : "white",
-                  color: activeTab === tab ? "white" : "var(--dark)",
-                  fontSize: "13px",
-                  padding: "8px 16px",
-                }}
-              >
-                {tab}
-              </button>
-            ))}
+          <div style={{
+            position: "absolute", bottom: "40%", right: "24px",
+            background: "white", border: S.border,
+            borderRadius: "999px", padding: "10px 20px",
+            fontWeight: 700, fontSize: "13px",
+          }}>
+            ТЕПЛО
           </div>
+          <div style={{
+            position: "absolute", bottom: "24px", right: "24px",
+            background: S.accent, border: S.border,
+            borderRadius: "50%", width: "110px", height: "110px",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            textAlign: "center", fontFamily: "'Unbounded', sans-serif",
+            fontWeight: 800, fontSize: "14px", lineHeight: 1.2, color: "white",
+          }}>
+            ОБЕД<br />ОТ 850 Р
+          </div>
+        </div>
+      </section>
 
-          {/* Menu items */}
-          <div style={{ display: "grid", gap: "12px" }}>
-            {menuData[activeTab as keyof typeof menuData].map((item, i) => (
-              <div
-                key={i}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "16px 20px",
-                  border: "var(--border)",
-                  background: "white",
-                  boxShadow: "4px 4px 0 var(--dark)",
-                  flexWrap: "wrap",
-                  gap: "8px",
-                }}
-              >
-                <div>
-                  <p style={{ fontWeight: 700, fontSize: "15px" }}>{item.name}</p>
-                  {item.weight && <p style={{ color: "#888", fontSize: "13px", marginTop: "2px" }}>{item.weight}</p>}
-                </div>
-                <span className="price">{item.price}</span>
+      {/* MARQUEE */}
+      <div style={{ background: S.dark, color: "white", padding: "16px 0", overflow: "hidden", borderBottom: S.border }}>
+        <div style={{
+          display: "inline-block", whiteSpace: "nowrap",
+          animation: "scroll 22s linear infinite",
+          fontWeight: 800, fontSize: "18px", letterSpacing: "4px", textTransform: "uppercase",
+        }}>
+          &nbsp; * ДОМАШНЯЯ КУХНЯ * СВОЯ ПЕКАРНЯ * КАЧЕСТВЕННЫЙ КОФЕ * ПЕРВЫЙ РАБОЧИЙ ОПЫТ * ВЛАДИВОСТОК *&nbsp;
+          ДОМАШНЯЯ КУХНЯ * СВОЯ ПЕКАРНЯ * КАЧЕСТВЕННЫЙ КОФЕ * ПЕРВЫЙ РАБОЧИЙ ОПЫТ * ВЛАДИВОСТОК *
+        </div>
+      </div>
+
+      {/* MENU */}
+      <section id="menu" style={{ padding: "70px 60px" }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(48px, 8vw, 96px)", lineHeight: 1, marginBottom: "48px" }}>
+          МЕНЮ
+        </h2>
+
+        {/* Tabs */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "32px" }}>
+          {Object.keys(menuData).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              style={{
+                padding: "10px 18px",
+                border: S.border,
+                background: activeTab === tab ? S.primary : "white",
+                color: activeTab === tab ? "white" : S.dark,
+                fontWeight: 700, fontSize: "13px", letterSpacing: "0.5px",
+                textTransform: "uppercase", cursor: "pointer",
+                display: "flex", alignItems: "center", gap: "8px",
+              }}
+            >
+              <span>{tabIcons[tab]}</span> {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Table */}
+        <div style={{ border: S.border }}>
+          <div style={{
+            background: S.dark, color: "white",
+            display: "grid", gridTemplateColumns: "1fr auto",
+            padding: "14px 24px", fontWeight: 800, fontSize: "13px", letterSpacing: "1px",
+          }}>
+            <span>БЛЮДО</span>
+            <span>ЦЕНА</span>
+          </div>
+          {menuData[activeTab].map((item, i) => (
+            <div
+              key={i}
+              style={{
+                display: "grid", gridTemplateColumns: "1fr auto",
+                padding: "18px 24px", alignItems: "center",
+                borderTop: i === 0 ? "none" : "1px solid #ddd",
+                background: "white",
+              }}
+            >
+              <div>
+                <p style={{ fontWeight: 700, fontSize: "15px", marginBottom: "2px" }}>{item.name}</p>
+                {item.weight && <p style={{ color: S.muted, fontSize: "13px" }}>{item.weight}</p>}
               </div>
-            ))}
-          </div>
-        </section>
+              <span style={{ color: S.primary, fontWeight: 800, fontSize: "16px", whiteSpace: "nowrap" }}>
+                {item.price}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        {/* Training plan */}
-        <section className="retro-vibe">
+      {/* TRAINING PLAN */}
+      <section style={{ padding: "70px 60px", background: S.dark, color: "white" }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(36px, 5vw, 64px)", marginBottom: "12px" }}>
+          ПЛАН ОБУЧЕНИЯ
+        </h2>
+        <p style={{ color: "#aaa", marginBottom: "48px", fontSize: "15px" }}>
+          Системный подход от первого контакта до записи в трудовой
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+          {trainingSteps.map((s, i) => (
+            <div key={i} style={{
+              display: "grid", gridTemplateColumns: "80px 1fr auto",
+              alignItems: "center", padding: "24px 0",
+              borderTop: "1px solid #333",
+            }}>
+              <span style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "32px", color: S.primary }}>
+                {s.step}
+              </span>
+              <div>
+                <p style={{ fontWeight: 800, fontSize: "16px", textTransform: "uppercase" }}>{s.title}</p>
+                <p style={{ color: "#aaa", fontSize: "13px", marginTop: "4px" }}>{s.who}</p>
+              </div>
+              {s.duration && (
+                <span style={{ background: S.accent, color: "white", padding: "6px 14px", fontWeight: 700, fontSize: "13px" }}>
+                  {s.duration}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* VACANCIES */}
+      <section id="vacancies" style={{ padding: "70px 60px" }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 1, marginBottom: "48px" }}>
+          ВАКАНСИИ
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "0", border: S.border }}>
+          {vacancies.map((v, i) => (
+            <div key={i} style={{
+              padding: "32px 28px",
+              borderRight: (i + 1) % 3 === 0 ? "none" : S.border,
+              borderBottom: i < vacancies.length - 3 ? S.border : "none",
+            }}>
+              <div style={{ fontSize: "36px", marginBottom: "16px" }}>{v.emoji}</div>
+              <h3 style={{ fontWeight: 800, fontSize: "16px", textTransform: "uppercase", marginBottom: "8px" }}>{v.title}</h3>
+              <p style={{ color: S.muted, fontSize: "13px", marginBottom: "12px" }}>Мест: {v.places}</p>
+              <p style={{ color: S.primary, fontWeight: 800, fontSize: "20px", marginBottom: "20px" }}>{v.salary}</p>
+              <a href="#apply" style={{
+                display: "block", textAlign: "center", padding: "10px",
+                border: S.border, background: "white", color: S.dark,
+                fontWeight: 800, fontSize: "12px", textDecoration: "none",
+                textTransform: "uppercase", letterSpacing: "1px",
+              }}>
+                Подробнее
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* APPLY FORM */}
+      <section id="apply" style={{ padding: "70px 60px", background: S.bg }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 1, marginBottom: "48px" }}>
+          ПОДАТЬ ЗАЯВКУ
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "60px", border: S.border, background: "white", padding: "48px" }}>
+          {/* Left */}
           <div>
-            <h2 className="vibe-title">ПЛАН ОБУЧЕНИЯ СТАЖЁРОВ</h2>
-            <p className="vibe-text">
-              Системный подход к трудоустройству: от первого звонка до записи в трудовой книжке.
+            <p style={{ fontSize: "15px", lineHeight: 1.7, color: S.muted, marginBottom: "28px" }}>
+              Заполните форму — и мы свяжемся с вами, чтобы обсудить подходящую вакансию и график. Опыт не нужен: мы обучаем с нуля.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginTop: "30px" }}>
-              {trainingSteps.map((step) => (
-                <div key={step.step} style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
-                  <div
-                    style={{
-                      minWidth: "50px",
-                      height: "50px",
-                      background: "var(--accent)",
-                      border: "var(--border)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontFamily: "Unbounded, sans-serif",
-                      fontWeight: 800,
-                      fontSize: "18px",
-                    }}
-                  >
-                    {step.step}
-                  </div>
-                  <div>
-                    <p style={{ fontWeight: 800, textTransform: "uppercase", fontSize: "15px" }}>{step.title}</p>
-                    <p style={{ color: "#555", fontSize: "13px", marginTop: "4px" }}>{step.who}</p>
-                    {step.duration && (
-                      <p style={{ color: "var(--primary)", fontSize: "12px", fontWeight: 700, marginTop: "2px" }}>
-                        {step.duration}
-                      </p>
-                    )}
-                  </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "28px" }}>
+              {[
+                { emoji: "🧡", text: "Официальное трудоустройство по ТК РФ" },
+                { emoji: "🎓", text: "Обучение с наставником — бесплатно" },
+                { emoji: "📋", text: "Запись в трудовой книжке" },
+                { emoji: "💛", text: "Гибкий график для особых категорий" },
+              ].map((c, i) => (
+                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+                  <span style={{ fontSize: "18px" }}>{c.emoji}</span>
+                  <span style={{ color: S.accent, fontSize: "14px", lineHeight: 1.5 }}>{c.text}</span>
                 </div>
               ))}
             </div>
+            <p style={{ color: S.muted, fontSize: "13px", marginBottom: "8px" }}>Или позвоните нам:</p>
+            <a href="tel:+79940183543" style={{ color: S.dark, fontWeight: 800, fontSize: "22px", textDecoration: "none" }}>
+              +7 994 018-35-43
+            </a>
           </div>
-          <div className="vibe-img"></div>
-        </section>
 
-        {/* Vacancies */}
-        <section className="section-padding" id="vacancies">
-          <div className="section-header">
-            <h2 className="section-title">ВАКАНСИИ</h2>
-            <p style={{ color: "#666", fontWeight: 700, textTransform: "uppercase", fontSize: "14px" }}>
-              Официальное трудоустройство по ТК РФ
-            </p>
-          </div>
-          <div className="menu-grid">
-            {vacancies.map((v, i) => (
-              <div key={i} className="menu-card" style={{ cursor: "default" }}>
-                <div
-                  style={{
-                    padding: "30px 20px 20px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "12px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "56px",
-                      height: "56px",
-                      background: "var(--accent)",
-                      border: "var(--border)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Icon name={v.icon} size={28} fallback="Briefcase" />
-                  </div>
-                  <h3 style={{ fontSize: "16px", fontWeight: 800, textTransform: "uppercase", lineHeight: 1.2 }}>
-                    {v.title}
-                  </h3>
-                  <p style={{ color: "#666", fontSize: "13px" }}>Мест: {v.places}</p>
-                  <span className="price" style={{ fontSize: "20px" }}>{v.salary}</span>
-                  <a href="#apply" className="btn-cta" style={{ textAlign: "center", textDecoration: "none", display: "block" }}>
-                    Подробнее
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Apply form */}
-        <section className="section-padding" id="apply" style={{ background: "var(--dark)", color: "white" }}>
-          <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-            <h2 className="section-title" style={{ color: "white", marginBottom: "12px" }}>
-              ПОДАТЬ ЗАЯВКУ
-            </h2>
-            <p style={{ color: "#aaa", marginBottom: "32px", lineHeight: 1.6 }}>
-              Телефон для связи: <strong style={{ color: "white" }}>+7 (994) 018-35-43</strong>
-            </p>
-
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {/* Right — Form */}
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+            <div>
+              <label style={{ display: "block", fontWeight: 800, fontSize: "12px", letterSpacing: "1px", marginBottom: "8px" }}>ВАШЕ ИМЯ *</label>
               <input
-                type="text"
-                placeholder="Ваше имя"
+                type="text" placeholder="Иван Иванов" required
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                style={{
-                  padding: "14px 16px",
-                  border: "3px solid white",
-                  background: "transparent",
-                  color: "white",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  outline: "none",
-                }}
+                style={{ width: "100%", padding: "14px 16px", border: S.border, background: S.bg, fontSize: "14px", fontFamily: "Montserrat, sans-serif", outline: "none" }}
               />
+            </div>
+            <div>
+              <label style={{ display: "block", fontWeight: 800, fontSize: "12px", letterSpacing: "1px", marginBottom: "8px" }}>НОМЕР ТЕЛЕФОНА *</label>
               <input
-                type="tel"
-                placeholder="Телефон"
+                type="tel" placeholder="+7 ___ ___-__-__" required
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                required
-                style={{
-                  padding: "14px 16px",
-                  border: "3px solid white",
-                  background: "transparent",
-                  color: "white",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  outline: "none",
-                }}
+                style={{ width: "100%", padding: "14px 16px", border: S.border, background: S.bg, fontSize: "14px", fontFamily: "Montserrat, sans-serif", outline: "none" }}
               />
-              <input
-                type="text"
-                placeholder="Желаемая должность"
+            </div>
+            <div>
+              <label style={{ display: "block", fontWeight: 800, fontSize: "12px", letterSpacing: "1px", marginBottom: "8px" }}>ЖЕЛАЕМАЯ ВАКАНСИЯ *</label>
+              <select
+                required
                 value={formData.position}
                 onChange={(e) => setFormData({ ...formData, position: e.target.value })}
-                required
-                style={{
-                  padding: "14px 16px",
-                  border: "3px solid white",
-                  background: "transparent",
-                  color: "white",
-                  fontFamily: "Montserrat, sans-serif",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  outline: "none",
-                }}
+                style={{ width: "100%", padding: "14px 16px", border: S.border, background: S.bg, fontSize: "14px", fontFamily: "Montserrat, sans-serif", outline: "none", appearance: "none", cursor: "pointer" }}
+              >
+                <option value="">Выберите вакансию...</option>
+                {vacancies.map((v) => <option key={v.title} value={v.title}>{v.title}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={{ display: "block", fontWeight: 800, fontSize: "12px", letterSpacing: "1px", marginBottom: "8px" }}>КАТЕГОРИЯ (НЕОБЯЗАТЕЛЬНО)</label>
+              <select
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                style={{ width: "100%", padding: "14px 16px", border: S.border, background: S.bg, fontSize: "14px", fontFamily: "Montserrat, sans-serif", outline: "none", appearance: "none", cursor: "pointer" }}
+              >
+                <option value="">Выберите категорию...</option>
+                <option>Выпускник детского дома</option>
+                <option>Человек с инвалидностью</option>
+                <option>Подросток 14–18 лет</option>
+                <option>Другое</option>
+              </select>
+            </div>
+            <div>
+              <label style={{ display: "block", fontWeight: 800, fontSize: "12px", letterSpacing: "1px", marginBottom: "8px" }}>КОММЕНТАРИЙ (НЕОБЯЗАТЕЛЬНО)</label>
+              <textarea
+                placeholder="Расскажите о себе, удобном графике или пожеланиях..."
+                value={formData.comment}
+                onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+                rows={4}
+                style={{ width: "100%", padding: "14px 16px", border: S.border, background: S.bg, fontSize: "14px", fontFamily: "Montserrat, sans-serif", outline: "none", resize: "vertical" }}
               />
-              <button
-                type="submit"
-                className="btn-cta"
-                style={{ background: "var(--accent)", color: "var(--dark)", marginTop: "8px", fontSize: "15px" }}
-              >
-                Отправить заявку
-              </button>
-            </form>
-
-            <div style={{ marginTop: "32px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-              {[
-                "Официальное трудоустройство по ТК РФ",
-                "Обучение с наставником бесплатно",
-                "Запись в трудовой книжке",
-                "Гибкий график для особых категорий",
-              ].map((cond, i) => (
-                <div key={i} style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
-                  <Icon name="CheckCircle" size={18} style={{ color: "var(--accent)", marginTop: "2px", flexShrink: 0 }} />
-                  <p style={{ color: "#ccc", fontSize: "13px", lineHeight: 1.4 }}>{cond}</p>
-                </div>
-              ))}
             </div>
-          </div>
-        </section>
-
-        {/* About */}
-        <section className="section-padding" id="about">
-          <h2 className="section-title" style={{ marginBottom: "40px", textAlign: "center" }}>
-            О НАС
-          </h2>
-          <div className="social-grid">
-            {aboutCards.map((card, i) => (
-              <div
-                key={i}
-                style={{
-                  border: "var(--border)",
-                  background: "white",
-                  boxShadow: "var(--shadow)",
-                  padding: "24px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "50px",
-                    height: "50px",
-                    background: "var(--primary)",
-                    border: "var(--border)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: "16px",
-                  }}
-                >
-                  <Icon name={card.icon} size={24} style={{ color: "white" }} />
-                </div>
-                <h3 style={{ fontFamily: "Unbounded, sans-serif", fontWeight: 800, fontSize: "14px", textTransform: "uppercase", marginBottom: "10px" }}>
-                  {card.title}
-                </h3>
-                <p style={{ fontSize: "14px", color: "#555", lineHeight: 1.6 }}>{card.text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Final slogan */}
-        <section className="retro-vibe" style={{ flexDirection: "column", textAlign: "center" }}>
-          <div style={{ maxWidth: "700px", margin: "0 auto" }}>
-            <h2 className="vibe-title" style={{ fontSize: "clamp(40px, 8vw, 96px)" }}>
-              ВЫ ЕДИТЕ —<br />ОНИ РАСТУТ.
-            </h2>
-            <p className="vibe-text">
-              Каждый ваш визит — это вклад в чью-то первую запись в трудовой. Без пожертвований и фондов.
-              Просто приходите обедать.
-            </p>
-          </div>
-        </section>
-
-        {/* Contacts */}
-        <section className="section-padding" id="contacts">
-          <h2 className="section-title" style={{ marginBottom: "40px", textAlign: "center" }}>
-            КОНТАКТЫ
-          </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px" }}>
-            <div style={{ border: "var(--border)", background: "white", boxShadow: "var(--shadow)", padding: "24px" }}>
-              <div style={{ width: "44px", height: "44px", background: "var(--accent)", border: "var(--border)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "14px" }}>
-                <Icon name="MapPin" size={22} />
-              </div>
-              <p style={{ fontWeight: 800, textTransform: "uppercase", fontSize: "13px", marginBottom: "6px" }}>Адрес</p>
-              <p style={{ color: "#555", fontSize: "14px", lineHeight: 1.5 }}>ул. Пушкинская, 34, Владивосток</p>
-            </div>
-            <div style={{ border: "var(--border)", background: "white", boxShadow: "var(--shadow)", padding: "24px" }}>
-              <div style={{ width: "44px", height: "44px", background: "var(--accent)", border: "var(--border)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "14px" }}>
-                <Icon name="Clock" size={22} />
-              </div>
-              <p style={{ fontWeight: 800, textTransform: "uppercase", fontSize: "13px", marginBottom: "6px" }}>Часы работы</p>
-              <p style={{ color: "#555", fontSize: "14px" }}>09:00 – 21:00</p>
-              <p style={{ color: "#888", fontSize: "12px" }}>Без выходных</p>
-            </div>
-            <div style={{ border: "var(--border)", background: "white", boxShadow: "var(--shadow)", padding: "24px" }}>
-              <div style={{ width: "44px", height: "44px", background: "var(--accent)", border: "var(--border)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "14px" }}>
-                <Icon name="Phone" size={22} />
-              </div>
-              <p style={{ fontWeight: 800, textTransform: "uppercase", fontSize: "13px", marginBottom: "6px" }}>Телефон</p>
-              <a href="tel:+79940183543" style={{ color: "var(--primary)", fontWeight: 700, fontSize: "15px" }}>
-                +7 (994) 018-35-43
-              </a>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer>
-        <div>
-          <div className="footer-logo">НАБЕРЕЖНАЯ ДОБРА</div>
-          <p style={{ color: "#666", lineHeight: 1.6 }}>
-            Социальное кафе во Владивостоке. Домашняя кухня, своя пекарня и первый рабочий опыт для тех, кто в этом нуждается.
-          </p>
+            <button type="submit" style={{
+              background: S.primary, color: "white", padding: "16px",
+              border: S.border, fontWeight: 800, fontSize: "14px",
+              letterSpacing: "1px", textTransform: "uppercase", cursor: "pointer",
+            }}>
+              ОТПРАВИТЬ ЗАЯВКУ →
+            </button>
+          </form>
         </div>
-        <div className="footer-links">
-          <h4>Навигация</h4>
-          <ul>
-            <li><a href="#menu" style={{ color: "inherit", textDecoration: "none" }}>Меню</a></li>
-            <li><a href="#about" style={{ color: "inherit", textDecoration: "none" }}>О нас</a></li>
-            <li><a href="#vacancies" style={{ color: "inherit", textDecoration: "none" }}>Вакансии</a></li>
-            <li><a href="#apply" style={{ color: "inherit", textDecoration: "none" }}>Подать заявку</a></li>
-            <li><a href="#contacts" style={{ color: "inherit", textDecoration: "none" }}>Контакты</a></li>
-          </ul>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" style={{ padding: "70px 60px" }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 1, marginBottom: "48px" }}>
+          О НАС
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", border: S.border }}>
+          {[
+            { emoji: "☕", title: "КТО МЫ", text: "«Набережная добра» — социальное кафе во Владивостоке с домашней кухней и собственной пекарней. Мы готовим обеды (супы, вторые блюда, салаты), печём круассаны, пирожки, булочки с корицей, блины и варим качественный кофе." },
+            { emoji: "❤️", title: "НАША МИССИЯ", text: "Дать первый рабочий опыт тем, кому сложно начать. Мы трудоустраиваем выпускников детских домов, людей с инвалидностью и подростков 14–18 лет. В Приморском крае сотни людей не могут найти работу из-за отсутствия опыта — мы ломаем этот замкнутый круг." },
+            { emoji: "🎓", title: "КАК ЭТО РАБОТАЕТ", text: "Каждый стажёр закреплён за наставником — опытным пекарем, поваром или администратором. Обучение проходит в реальном процессе: выпечка, приготовление блюд, работа с кассой, обслуживание гостей. После — запись в трудовой книжке." },
+            { emoji: "⭐", title: "ПОЧЕМУ ВЫБИРАЮТ НАС", text: "Мы — единственное кафе во Владивостоке, которое совмещает домашнюю кухню, пекарню, кофе и системное трудоустройство трёх уязвимых групп. Приходя к нам, вы не просто обедаете — вы становитесь частью доброго дела." },
+          ].map((card, i) => (
+            <div key={i} style={{
+              padding: "36px 32px",
+              borderRight: i % 2 === 0 ? S.border : "none",
+              borderBottom: i < 2 ? S.border : "none",
+              background: "white",
+            }}>
+              <div style={{ fontSize: "32px", marginBottom: "16px" }}>{card.emoji}</div>
+              <h3 style={{ fontWeight: 800, fontSize: "14px", letterSpacing: "1px", marginBottom: "12px" }}>{card.title}</h3>
+              <p style={{ color: S.accent, fontSize: "14px", lineHeight: 1.7 }}>{card.text}</p>
+            </div>
+          ))}
         </div>
-        <div>
-          <h4>Контакты</h4>
-          <p style={{ color: "#666", marginTop: "10px" }}>09:00 – 21:00, без выходных</p>
-          <p style={{ color: "#666" }}>Владивосток</p>
-          <p style={{ marginTop: "10px" }}>
-            <a href="tel:+79940183543" style={{ color: "var(--primary)", fontWeight: 700 }}>
-              +7 (994) 018-35-43
+      </section>
+
+      {/* SLOGAN */}
+      <section style={{ padding: "70px 60px", background: S.dark, color: "white" }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(42px, 7vw, 88px)", lineHeight: 1, marginBottom: "16px" }}>
+          ВЫ ЕДИТЕ —
+        </h2>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(42px, 7vw, 88px)", lineHeight: 1, color: S.accent, marginBottom: "32px" }}>
+          ОНИ РАСТУТ.
+        </h2>
+        <p style={{ color: "#aaa", fontSize: "15px", lineHeight: 1.7, maxWidth: "520px" }}>
+          Каждый ваш визит — это вклад в чью-то первую запись в трудовой.<br />
+          Без пожертвований и фондов. Просто приходите обедать.
+        </p>
+      </section>
+
+      {/* CONTACTS */}
+      <section id="contacts" style={{ padding: "70px 60px" }}>
+        <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 1, marginBottom: "48px" }}>
+          КОНТАКТЫ
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0", border: S.border }}>
+          <div style={{ padding: "36px 32px", borderRight: S.border }}>
+            <p style={{ fontWeight: 800, fontSize: "12px", letterSpacing: "1px", color: S.muted, marginBottom: "16px" }}>АДРЕС</p>
+            <a
+              href="https://maps.google.com/?q=Пушкинская+34+Владивосток"
+              target="_blank" rel="noreferrer"
+              style={{ color: S.accent, fontWeight: 700, fontSize: "16px", textDecoration: "none" }}
+            >
+              ул. Пушкинская, 34 →
             </a>
+            <p style={{ color: S.dark, fontSize: "14px", marginTop: "4px" }}>Владивосток</p>
+          </div>
+          <div style={{ padding: "36px 32px", borderRight: S.border }}>
+            <p style={{ fontWeight: 800, fontSize: "12px", letterSpacing: "1px", color: S.muted, marginBottom: "16px" }}>ЧАСЫ РАБОТЫ</p>
+            <p style={{ fontWeight: 700, fontSize: "16px" }}>09:00 – 21:00</p>
+            <p style={{ color: S.muted, fontSize: "13px", marginTop: "4px" }}>Ежедневно, без выходных</p>
+          </div>
+          <div style={{ padding: "36px 32px" }}>
+            <p style={{ fontWeight: 800, fontSize: "12px", letterSpacing: "1px", color: S.muted, marginBottom: "16px" }}>ТЕЛЕФОН</p>
+            <a href="tel:+79940183543" style={{ color: S.dark, fontWeight: 800, fontSize: "18px", textDecoration: "none" }}>
+              +7 994 018-35-43
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer style={{ padding: "60px 60px", borderTop: S.border, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "40px" }}>
+        <div>
+          <div style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "24px", lineHeight: 1.1, marginBottom: "16px" }}>
+            НАБЕРЕЖНАЯ<br />ДОБРА
+          </div>
+          <p style={{ color: S.muted, fontSize: "14px", lineHeight: 1.6, marginBottom: "20px" }}>
+            Социальное кафе с домашней кухней и своей пекарней.<br />
+            Владивосток. Где каждый обед — это чей-то первый шаг.
           </p>
+          <p style={{ fontWeight: 800, fontSize: "12px", letterSpacing: "1px", color: S.muted, marginBottom: "8px" }}>КОНТАКТЫ</p>
+          <p style={{ fontSize: "15px", fontWeight: 600, marginBottom: "4px" }}>+7 994 018-35-43</p>
+          <a href="https://maps.google.com/?q=Пушкинская+34+Владивосток" target="_blank" rel="noreferrer"
+            style={{ color: S.accent, fontSize: "14px" }}>
+            ул. Пушкинская, 34 →
+          </a>
+          <p style={{ fontSize: "14px", color: S.muted, marginTop: "4px" }}>Владивосток</p>
+        </div>
+        <div>
+          <p style={{ fontWeight: 800, fontSize: "12px", letterSpacing: "1px", color: S.accent, marginBottom: "16px" }}>НАВИГАЦИЯ</p>
+          {[["#menu","Меню"],["#about","О нас"],["#vacancies","Вакансии"],["#apply","Стажёрам"],["#contacts","Контакты"]].map(([href, label]) => (
+            <a key={href} href={href} style={{ display: "block", color: S.dark, textDecoration: "none", fontSize: "14px", marginBottom: "10px" }}>
+              {label}
+            </a>
+          ))}
+        </div>
+        <div>
+          <p style={{ fontWeight: 800, fontSize: "12px", letterSpacing: "1px", color: S.accent, marginBottom: "16px" }}>ЧАСЫ РАБОТЫ</p>
+          <p style={{ fontSize: "15px", fontWeight: 700 }}>Ежедневно: 09:00 - 21:00</p>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
