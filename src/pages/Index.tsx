@@ -197,8 +197,8 @@ export default function Index() {
 
         <div style={{ position: "relative", overflow: "hidden" }}>
           <img
-            src="https://cdn.poehali.dev/projects/05b0b7de-7dfd-4211-88ef-00b974e4c49e/bucket/f020329c-94b1-45b2-b171-1998290997fa.png"
-            alt="Круассаны и булочки"
+            src="https://cdn.poehali.dev/projects/05b0b7de-7dfd-4211-88ef-00b974e4c49e/files/e721b67c-adfd-431a-b331-6cbc5d19e11d.jpg"
+            alt="Круассаны и булочки в кафе"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
           <div style={{
