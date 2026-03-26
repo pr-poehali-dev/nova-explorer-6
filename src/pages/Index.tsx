@@ -69,12 +69,42 @@ const tabIcons: Record<string, string> = {
 };
 
 const vacancies = [
-  { emoji: "👨‍🍳", title: "Пекарь", places: 2, salary: "55 000 ₽/мес" },
-  { emoji: "🍳", title: "Повар", places: 2, salary: "60 000 ₽/мес" },
-  { emoji: "🤝", title: "Официант", places: 2, salary: "40 000 ₽/мес" },
-  { emoji: "📋", title: "Администратор", places: 1, salary: "60 000 ₽/мес" },
-  { emoji: "🎓", title: "Стажёр", places: 4, salary: "20 000 ₽/мес" },
-  { emoji: "✨", title: "Уборщик", places: 1, salary: "35 000 ₽/мес" },
+  {
+    emoji: "🥐", title: "Пекарь", places: 2, salary: "55 000 ₽/мес",
+    desc: "Замес теста, формовка, выпечка круассанов, булочек, пирожков. Работа с наставником.",
+    schedule: "5 дней в неделю, утренняя смена",
+    req: "Опыт не обязателен — обучаем с нуля",
+  },
+  {
+    emoji: "🍳", title: "Повар", places: 2, salary: "60 000 ₽/мес",
+    desc: "Приготовление первых и вторых блюд, салатов по домашним рецептам. Работа в паре с наставником.",
+    schedule: "5–6 дней в неделю, дневная смена",
+    req: "Желание готовить вкусно. Опыт приветствуется, но не обязателен",
+  },
+  {
+    emoji: "🤝", title: "Официант", places: 2, salary: "40 000 ₽/мес",
+    desc: "Обслуживание гостей, приём заказов, поддержание уюта в зале.",
+    schedule: "Гибкий, 5 дней в неделю",
+    req: "Дружелюбность, внимательность. Опыт не нужен",
+  },
+  {
+    emoji: "📋", title: "Администратор", places: 1, salary: "60 000 ₽/мес",
+    desc: "Координация работы смены, касса, работа с гостями, контроль качества.",
+    schedule: "5 дней в неделю, полный день",
+    req: "Опыт в сфере обслуживания от 1 года",
+  },
+  {
+    emoji: "🎓", title: "Стажёр", places: 4, salary: "20 000 ₽/мес",
+    desc: "Помощь на кухне или в зале, освоение одной из специальностей (пекарь, повар, официант) под руководством наставника.",
+    schedule: "Гибкий, обсуждается индивидуально",
+    req: "Без требований. Принимаем выпускников детских домов, подростков 14–18 лет, людей с инвалидностью",
+  },
+  {
+    emoji: "✨", title: "Уборщик", places: 1, salary: "35 000 ₽/мес",
+    desc: "Поддержание чистоты в зале и на кухне, работа с инвентарём.",
+    schedule: "Утренняя и/или вечерняя смена",
+    req: "Ответственность и аккуратность. Опыт не нужен",
+  },
 ];
 
 const trainingSteps = [
@@ -87,7 +117,7 @@ const S = {
   bg: "#f5f0e8",
   dark: "#1a1a1a",
   primary: "#b83232",
-  accent: "#5bc8e8",
+  accent: "#1a1a1a",
   border: "2px solid #1a1a1a",
   text: "#1a1a1a",
   muted: "#666",
@@ -95,6 +125,7 @@ const S = {
 
 export default function Index() {
   const [activeTab, setActiveTab] = useState("Супы");
+  const [expandedVacancy, setExpandedVacancy] = useState<number | null>(null);
   const [formData, setFormData] = useState({ name: "", phone: "", position: "", category: "", comment: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -307,27 +338,56 @@ export default function Index() {
         <h2 style={{ fontFamily: "'Unbounded', sans-serif", fontWeight: 800, fontSize: "clamp(48px, 7vw, 88px)", lineHeight: 1, marginBottom: "48px" }}>
           ВАКАНСИИ
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "0", border: S.border }}>
-          {vacancies.map((v, i) => (
-            <div key={i} style={{
-              padding: "32px 28px",
-              borderRight: (i + 1) % 3 === 0 ? "none" : S.border,
-              borderBottom: i < vacancies.length - 3 ? S.border : "none",
-            }}>
-              <div style={{ fontSize: "36px", marginBottom: "16px" }}>{v.emoji}</div>
-              <h3 style={{ fontWeight: 800, fontSize: "16px", textTransform: "uppercase", marginBottom: "8px" }}>{v.title}</h3>
-              <p style={{ color: S.muted, fontSize: "13px", marginBottom: "12px" }}>Мест: {v.places}</p>
-              <p style={{ color: S.primary, fontWeight: 800, fontSize: "20px", marginBottom: "20px" }}>{v.salary}</p>
-              <a href="#apply" style={{
-                display: "block", textAlign: "center", padding: "10px",
-                border: S.border, background: "white", color: S.dark,
-                fontWeight: 800, fontSize: "12px", textDecoration: "none",
-                textTransform: "uppercase", letterSpacing: "1px",
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "16px" }}>
+          {vacancies.map((v, i) => {
+            const isOpen = expandedVacancy === i;
+            return (
+              <div key={i} style={{
+                border: S.border, background: "white", padding: "28px",
+                boxShadow: isOpen ? "6px 6px 0 #1a1a1a" : "none",
+                transition: "box-shadow 0.2s",
               }}>
-                Подробнее
-              </a>
-            </div>
-          ))}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+                  <span style={{ fontSize: "32px" }}>{v.emoji}</span>
+                  <span style={{ background: S.dark, color: "white", padding: "4px 12px", fontSize: "12px", fontWeight: 700 }}>
+                    {v.places} места
+                  </span>
+                </div>
+                <h3 style={{ fontWeight: 800, fontSize: "16px", textTransform: "uppercase", marginBottom: "8px" }}>{v.title}</h3>
+                <p style={{ color: S.primary, fontWeight: 800, fontSize: "22px", marginBottom: isOpen ? "16px" : "20px" }}>
+                  {v.salary.replace("/мес", "")} <span style={{ fontSize: "14px", fontWeight: 600, color: S.muted }}>/мес</span>
+                </p>
+
+                {isOpen && (
+                  <div style={{ marginBottom: "16px" }}>
+                    <p style={{ fontSize: "14px", lineHeight: 1.6, color: S.dark, marginBottom: "12px" }}>{v.desc}</p>
+                    <p style={{ fontSize: "13px", marginBottom: "6px" }}>
+                      <span style={{ marginRight: "6px" }}>📅</span>
+                      <strong>График:</strong>{" "}
+                      <span style={{ color: S.primary }}>{v.schedule}</span>
+                    </p>
+                    <p style={{ fontSize: "13px" }}>
+                      <span style={{ marginRight: "6px" }}>✅</span>
+                      <strong>Требования:</strong>{" "}
+                      <span style={{ color: S.primary }}>{v.req}</span>
+                    </p>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => setExpandedVacancy(isOpen ? null : i)}
+                  style={{
+                    background: "none", border: "none", padding: 0,
+                    color: S.primary, fontWeight: 800, fontSize: "13px",
+                    letterSpacing: "0.5px", textTransform: "uppercase",
+                    cursor: "pointer",
+                  }}
+                >
+                  {isOpen ? "СКРЫТЬ ↑" : "ПОДРОБНЕЕ ↓"}
+                </button>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -448,7 +508,7 @@ export default function Index() {
             }}>
               <div style={{ fontSize: "32px", marginBottom: "16px" }}>{card.emoji}</div>
               <h3 style={{ fontWeight: 800, fontSize: "14px", letterSpacing: "1px", marginBottom: "12px" }}>{card.title}</h3>
-              <p style={{ color: S.accent, fontSize: "14px", lineHeight: 1.7 }}>{card.text}</p>
+              <p style={{ color: S.muted, fontSize: "14px", lineHeight: 1.7 }}>{card.text}</p>
             </div>
           ))}
         </div>
@@ -479,7 +539,7 @@ export default function Index() {
             <a
               href="https://maps.google.com/?q=Пушкинская+34+Владивосток"
               target="_blank" rel="noreferrer"
-              style={{ color: S.accent, fontWeight: 700, fontSize: "16px", textDecoration: "none" }}
+              style={{ color: S.primary, fontWeight: 700, fontSize: "16px", textDecoration: "none" }}
             >
               ул. Пушкинская, 34 →
             </a>
@@ -512,7 +572,7 @@ export default function Index() {
           <p style={{ fontWeight: 800, fontSize: "12px", letterSpacing: "1px", color: S.muted, marginBottom: "8px" }}>КОНТАКТЫ</p>
           <p style={{ fontSize: "15px", fontWeight: 600, marginBottom: "4px" }}>+7 994 018-35-43</p>
           <a href="https://maps.google.com/?q=Пушкинская+34+Владивосток" target="_blank" rel="noreferrer"
-            style={{ color: S.accent, fontSize: "14px" }}>
+            style={{ color: S.primary, fontSize: "14px" }}>
             ул. Пушкинская, 34 →
           </a>
           <p style={{ fontSize: "14px", color: S.muted, marginTop: "4px" }}>Владивосток</p>
